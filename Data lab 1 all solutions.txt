@@ -1,0 +1,289 @@
+
+you can find all solutions here in order as the lab word file.
+name: ESLAM HAMMADO, STUDENT NO: 2210213542.
+
+
+
+
+First function:
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+Node* addNode(Node* head, int value) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (head == NULL) {
+        return newNode;
+    }
+
+    Node* current = head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = newNode;
+
+    return head;
+}
+
+void printList(Node* head) {
+    Node* current = head;
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    Node* oddList = NULL;
+    Node* evenList = NULL;
+    int num;
+
+    while (1) {
+        printf("Enter a number (-1 to stop): ");
+        scanf("%d", &num);
+
+        if (num == -1) {
+            break;
+        }
+
+        if (num % 2 == 0) {
+            evenList = addNode(evenList, num);
+        } else {
+            oddList = addNode(oddList, num);
+        }
+    }
+
+    Node* current = oddList;
+    if (current != NULL) {
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = evenList;
+    } else {
+        oddList = evenList;
+    }
+
+    printf("Resulting list: ");
+    printList(oddList);
+
+    
+    while (oddList != NULL) {
+        Node* temp = oddList;
+        oddList = oddList->next;
+        free(temp);
+    }
+
+    return 0;
+}
+
+
+
+
+Second Question:
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+Node* addNode(Node* head, int value) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (head == NULL) {
+        return newNode;
+    }
+
+    Node* current = head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = newNode;
+
+    return head;
+}
+
+void printList(Node* head) {
+    Node* current = head;
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+void bubbleSort(Node* head) {
+    int swapped;
+    Node* current;
+    Node* last = NULL;
+
+    if (head == NULL) {
+        return;
+    }
+
+    do {
+        swapped = 0;
+        current = head;
+
+        while (current->next != last) {
+            if (current->data < current->next->data) {
+               
+                int temp = current->data;
+                current->data = current->next->data;
+                current->next->data = temp;
+                swapped = 1;
+            }
+            current = current->next;
+        }
+        last = current;
+    } while (swapped);
+}
+
+int main() {
+    Node* list = NULL;
+    int num;
+
+    
+    srand(time(NULL));
+
+    
+    for (int i = 0; i < 100; i++) {
+        num = rand() % 1000; // Generating random numbers between 0 and 999
+        list = addNode(list, num);
+    }
+
+    printf("Unsorted list: ");
+    printList(list);
+
+    
+    bubbleSort(list);
+
+    printf("Sorted list (largest to smallest): ");
+    printList(list);
+
+    
+    while (list != NULL) {
+        Node* temp = list;
+        list = list->next;
+        free(temp);
+    }
+
+    return 0;
+}
+
+
+   Third Question:
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Student {
+    int number;
+    char name[50];
+    int age;
+    struct Student* next;
+};
+
+typedef struct Student Student;
+
+void addStudent(Student** head, int number, char name[], int age) {
+    Student* newStudent = (Student*)malloc(sizeof(Student));
+    newStudent->number = number;
+    strcpy(newStudent->name, name);
+    newStudent->age = age;
+    newStudent->next = *head;
+    *head = newStudent;
+}
+
+void displayStudents(Student* head) {
+    int count = 0;
+    while (head != NULL) {
+        count++;
+        printf("%d- %s %d %d\n", count, head->name, head->age, head->number);
+        head = head->next;
+    }
+    printf("Total number of students: %d\n", count);
+}
+
+int main() {
+    Student* head = NULL;
+    
+    addStudent(&head, 201, "Saliha", 27);
+    addStudent(&head, 203, "Ece", 19);
+    
+    displayStudents(head);
+
+    return 0;
+}
+
+
+
+
+
+Fourth Question: 
+
+
+
+Student* searchStudentByName(Student* head, const char* targetName) {
+    while (head != NULL) {
+        if (strcmp(head->name, targetName) == 0) {
+            return head;
+        }
+        head = head->next;
+    }
+    return NULL; 
+}
+
+
+Fifth Question: 
+
+void deleteNextStudent(Student* student) {
+    if (student == NULL || student->next == NULL) {
+        return; 
+    }
+    Student* temp = student->next;
+    student->next = temp->next;
+    free(temp);
+}
+
+
+Sixth Question:
+
+
+Student* findStudentWithLongestName(Student* head) {
+    Student* longestNameStudent = NULL;
+    int maxNameLength = 0;
+
+    while (head != NULL) {
+        int currentNameLength = strlen(head->name);
+        if (currentNameLength > maxNameLength) {
+            maxNameLength = currentNameLength;
+            longestNameStudent = head;
+        }
+        head = head->next;
+    }
+
+    return longestNameStudent;
+}
